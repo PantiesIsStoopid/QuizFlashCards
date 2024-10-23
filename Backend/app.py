@@ -1,41 +1,30 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-quizzes = []
-flashcards = []
+# Dummy data for quizzes
+quizzes = {
+    'maths': ["What is 2 + 2?", "What is the square root of 16?"],
+    'physics': ["What is the formula for force?", "What is Newton's second law?"],
+    'biology': ["What is the powerhouse of the cell?", "What is DNA?"],
+    'chemistry': ["What is the chemical formula for water?", "What is pH?"]
+}
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/api/quizzes', methods=['GET'])
-def get_quizzes():
-    return jsonify(quizzes)
-
-@app.route('/api/quizzes', methods=['POST'])
-def create_quiz():
-    new_quiz = request.json
-    quizzes.append(new_quiz)
-    return jsonify(new_quiz), 201
-
-@app.route('/api/flashcards', methods=['GET'])
-def get_flashcards():
-    return jsonify(flashcards)
-
-@app.route('/api/flashcards', methods=['POST'])
-def create_flashcard():
-    new_flashcard = request.json
-    flashcards.append(new_flashcard)
-    return jsonify(new_flashcard), 201
-
 @app.route('/quizzes')
 def quizzes_page():
-    return render_template('quizzes.html')
+    subject = request.args.get('subject')
+    questions = quizzes.get(subject, [])
+    return render_template('quizzes.html', subject=subject, questions=questions)
 
 @app.route('/flashcards')
 def flashcards_page():
-    return render_template('flashcards.html')
+    subject = request.args.get('subject')
+    # You can replace this with actual flashcard data
+    return render_template('flashcards.html', subject=subject)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,12 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz and Flashcard App</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <h1>Welcome to Quiz and Flashcard App</h1>
     <h2>Select an option:</h2>
-    <button onclick="window.location.href='/quizzes'">Quizzes</button>
-    <button onclick="window.location.href='/flashcards'">Flashcards</button>
+    <button onclick="showSubjects('quizzes')">Quizzes</button>
+    <button onclick="showSubjects('flashcards')">Flashcards</button>
+
+    <div id="subjectSelection" style="display:none;">
+        <h2>Select a Subject:</h2>
+        <select id="subjectSelect">
+            <option value="">--Select a Subject--</option>
+            <option value="maths">Maths</option>
+            <option value="physics">Physics</option>
+            <option value="biology">Biology</option>
+            <option value="chemistry">Chemistry</option>
+        </select>
+        <button id="startButton">Start</button>
+    </div>
+
+    <script>
+        function showSubjects(type) {
+            document.getElementById('subjectSelection').style.display = 'block';
+            document.getElementById('startButton').onclick = function() {
+                const subject = document.getElementById('subjectSelect').value;
+                if (subject) {
+                    // Ensure the URL routing matches the Flask routes
+                    window.location.href = `/${type}?subject=${subject}`;
+                } else {
+                    alert('Please select a subject!');
+                }
+            };
+        }
+    </script>
 </body>
 </html>
